@@ -1,0 +1,77 @@
+---
+title: "Data Products | Final Project"
+author: "Ben Tafoya"
+date: "1/29/2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Project Introduction
+
+This presentation is part of the final project for the Developing Data Products course in Coursera's Data Science series.
+
+The project combines data from the Massachusetts Department of Public Health, Department of Revenue and US Census Bureau to illustrate the level of Covid infections in various communities in the Commonwealth.
+
+## Project Approach
+
+The data file which is published with the code shows the name of each community, population, per capita income and COVID-19 infection rate per 100K population. The data is sorted by population with Boston, the largest city in the state, as the first record. The data goes to the 350th community by population which is Gosnold.
+
+```{r, message=FALSE, echo=FALSE, comment=NA}
+library(shiny)
+library(readxl)
+library(tidyverse)
+library(leaflet)
+library(plotly)
+library(webshot)
+library(dplyr)
+
+LinkPart <- "CoviddataMassJan.xlsx"
+        df2 <- read_excel(LinkPart)
+        df2$Cases100K <- as.numeric(df2$Cases100K)
+        head(df2)
+        
+```
+
+## Sample Output from App
+
+The default plot on the app is for the 40 largest communities by population.
+
+```{r, message=FALSE, warning = FALSE, echo=FALSE}
+library(readxl)
+library(tidyverse)
+library(leaflet)
+library(plotly)
+library(webshot)
+library(data.table)
+LinkPart <- "CoviddataMassJan.xlsx"
+
+
+df2 <- read_excel(LinkPart)
+
+df2$Cases100K <- as.numeric(df2$Cases100K)
+
+df2 <- df2[order(-df2$Population),]
+plot3 <- plot_ly(df2[1:40,], x = ~Incomepercapita, y = ~Cases100K, type = "scatter") %>% 
+  layout(title = "Mass Covid Infection Rate v. Community Income",                                 xaxis = list(title="Income per Capita"), 
+           yaxis = list(title="Confirmed COVID Cases per 100K"))
+plot3
+```
+
+## Summary of Project and Links
+
+The data is from the frist two weeks in January and shows an interesting trend where as income rises, the rate of infection falls. As you add more communities to the plot, through use of the slider, after about community 150, the effect starts to be less apparent.The next step will be to add more data and go further back in time.
+
+The application can be run from here:
+https://bentafoyadatascience.shinyapps.io/DataProductsFinal/ 
+
+The code is available in the following GitHub repo:
+https://github.com/bentafoya/DataProductsFinal 
+
+
+
+
+
+
